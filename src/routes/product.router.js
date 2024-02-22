@@ -11,27 +11,27 @@ const pm = new ProductManager()
 const routerP = express.Router()
 
 
-routerP.get("/products",async(req, res)=>{
+routerP.get("/",async(req, res)=>{
     const productList = await pm.getProducts(req.query)
     res.json({productList})
 })
 
-routerP.get("/products/:pid",async(req, res)=>{
+routerP.get("/:pid",async(req, res)=>{
     const productFind = await pm.getProductById(req.params)
     res.json({ status: "success", productFind })
 })
 
-routerP.post("/products",async(req, res)=>{
+routerP.post("",async(req, res)=>{
     const newproduct = await pm.addProducts(req.body)
     res.json({ status: "success", newproduct })
 })
 
-routerP.put("/products/:pid", async(req, res)=>{
+routerP.put("/:pid", async(req, res)=>{
     const updateproduct = await pm.updateProduct(req.params, req.body)
     res.json({ status: "success", updateproduct })
 })
 
-routerP.delete("/products/:pid", async(req, res)=>{
+routerP.delete("/:pid", async(req, res)=>{
     const id = parseInt(req.params.pid)
     const deleteproduct = await pm.deleteProduct(id)
     res.json({ status: "success", deleteproduct })

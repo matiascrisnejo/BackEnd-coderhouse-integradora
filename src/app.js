@@ -7,13 +7,15 @@ import { Server } from "socket.io"
 import socketProducts from "./listeners/socketProducts.js"
 import connectToDB from "./Dao/config/config.server.js"
 import socketChat from "./listeners/socketChat.js"
+import routerC from "./routes/carts.router.js"
 
 const app = express()
 const PORT = 8080
 
 
-app.use("/api", routerP)
+app.use("/api/products", routerP)
 app.use("/", routerV)
+app.use("/api/carts", routerC)
 
 app.use(express.static(__dirname+"/public"))
 
