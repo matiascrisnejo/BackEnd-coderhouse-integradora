@@ -18,7 +18,7 @@ const productSchema= new mongoose.Schema({
         required: true
     },
     thumbnail: {
-        type: String,
+        type: String,   //[String]
         required: false // Ahora el campo no es requerido
     },
     code: {

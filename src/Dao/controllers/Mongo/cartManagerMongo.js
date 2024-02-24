@@ -5,57 +5,40 @@ const pm = new ProductManager()
 
 export default class CartManager{
     
-    async getCarts(){
-        try {
-            return await cartsModel.find().lean()
-        } catch (error) {
-            return error
-        }
+    // async getCarts(){
+        
+    //     try {
+    //         return await cartsModel.find().lean()
+    //     } catch (error) {
+    //         return error
+    //     }
+    // }
+
+    async findCartById(cid){
+        const cart = await cartsModel.findById(cid)
+        console.log("response", cart)
+        return cart
     }
 
-    async getCartbyId(id){
-       try {
-        return await cartsModel.findById(id)
-       } catch (err) {
-            return {error: err.message}
-       }
-    }
-
-
-    async addCart(){
-        try {
-            let cart = {
-                prooducts: []
-            }
-            cart = await cartsModel.create(cart)
-            if(!cart){
-                throw new Error("no se pudo crear el carrito")
-            }
-            return cart
-        } catch (error) {
-            throw error
-        }
+    async createCart(){
+        const newCart = {products: []}
+        const cart = await cartsModel.create(newCart)
+        return cart
     }
 
     async addProductToCart(cid, pid){
-        
-        try {
-            await pm.getProducts().getProductById(pid)
-            let cart = await this.getCartbyId(cid)
-            const productIndex = cart.products.findIndex(p => p.pid === pid)
-            if (productIndex !== -1) {
-                cart.products[productIndex].quantity++
-            } else {
-                cart.products.push({
-                    pid,
-                    quantity: 1
-                  })
-            }
-            cart = await cartsModel.findByIdAndUpdate(cid, { products: cart.products }, { new: true })
-            return cart
-        } catch (error) {
-            throw error
+        const cart = await cartsModel.findById(cid)
+        const productIndex = cart.products.findIndex(
+            (p) => p.product.equals(pid))
+        if(productIndex === -1){
+            cart.products.push({
+                product: pid,
+                quantity: 1
+            })
+        } else{
+            cart.products[productIndex].quantity++
         }
+        return cart.save()
     }
 
     async deleteProduct(cid, pid){
